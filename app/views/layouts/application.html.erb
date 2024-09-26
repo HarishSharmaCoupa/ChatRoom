@@ -2,15 +2,14 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Message Me" %></title>
-    <%= favicon_link_tag %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
+    
 
-    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -20,11 +19,24 @@
 
   <body>
     <div class="ui stackable menu">
-      <a class="item">ChatRoom</a>
-      <a class="item">Messages</a>
-      <a class="item">Sign-in</a>
+      <a class="item" href='/'>ChatRoom</a>
+      
+      <% if logged_in? %>
+        <a class="item"><%= current_user.username %></a>
+        <%= button_to "logout", logout_path, method: :delete, class: "item"%>
+      <% else %>
+       <%= link_to "Log In", login_path, class: "item"%>
+       <%= link_to "SignUp", new_user_path, class: "item"%>
+        
+      <% end %>
+      
     </div>
+    <h2 class="ui center aligned icon header">
+  <i class="circular users orange icon"></i>
+  Friends
+</h2>
     <div class="ui container">
+      <%= render 'layouts/messages' %>
       <%= yield %>
     </div>
   </body>
